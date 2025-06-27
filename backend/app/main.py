@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 from sqlmodel import SQLModel, Session, text
 from app.database import engine, get_session
-from app.models.user import User
+from app.models.user import User, UserCreate
 
 
 app = FastAPI()
@@ -18,16 +18,10 @@ async def read_root():
     return {"hello"}
 
 
-# @app.get("/users")
-# def read_users(session: Session = Depends(get_session)):
-#     users = session.exec(text("SELECT * FROM user")).all()
-#     return {users}
-
-
 @app.post("/users")
-def create_user(name: str, session: Session = Depends(get_session)):
-    user = User(name=name)
-    session.add(user)
+def create_user(user: UserCreate, session: Session = Depends(get_session)):
+    db_user = User(**user.dict())
+    session.add(db_user)
     session.commit()
-    session.refresh(user)
-    return user
+    session.refresh(db_user)
+    return db_user

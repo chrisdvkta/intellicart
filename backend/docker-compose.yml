@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: ecommerce_user
       POSTGRES_PASSWORD: balti
     ports:
-      - "5433:5432"
+      - "5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

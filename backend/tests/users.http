@@ -1,0 +1,9 @@
+### Create a new user
+POST http://localhost:8000/users
+Content-Type: application/json
+
+{
+  "name": "Pranjal Raut",
+  "email": "diddy@example.com",
+  "is_active": true
+}
