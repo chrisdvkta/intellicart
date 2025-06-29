@@ -1,27 +1,29 @@
-from fastapi import Depends, FastAPI
-from sqlmodel import SQLModel, Session, text
-from app.database import engine, get_session
-from app.models.user import User, UserCreate
-
+from fastapi import APIRouter, FastAPI
+from app.auth.routes import auth_router
+from app.db.main import init_db
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 
 @app.on_event("startup")
-async def startup_event():
-    SQLModel.metadata.create_all(engine)
-    print("tables created")
+async def on_startup():
+    await init_db()
 
 
 @app.get("/")
-async def read_root():
-    return {"hello"}
+async def root():
+    return {"message": "Hello World"}
 
 
-@app.post("/users")
-def create_user(user: UserCreate, session: Session = Depends(get_session)):
-    db_user = User(**user.dict())
-    session.add(db_user)
-    session.commit()
-    session.refresh(db_user)
-    return db_user
+v1_router = APIRouter(prefix="/v1")
+v1_router.include_router(auth_router, prefix="/auth", tags=["Authentication"])
+app.include_router(v1_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
