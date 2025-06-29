@@ -1,0 +1,26 @@
+### Register a new user
+POST http://localhost:8000/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "name":"krish testing",
+  "password": "secret123"
+}
+
+###
+
+### Login and get access_token cookie
+POST http://localhost:8000/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "secret123"
+}
+
+
+
+### Get profile (requires access_token cookie)
+GET http://localhost:8000/v1/auth/me
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSJ9LCJleHAiOjE3NTEzODQyNjd9.UdDm4x7O3sdubXHz6WPsfU9bmvPPG7xbDmQ8YvlB-Lw
