@@ -1,0 +1,12 @@
+POST http://localhost:8000/v1/products
+Content-Type: application/json
+
+{
+"name": "Wireless Mouse",
+  "description": "Ergonomic wireless mouse with USB receiver",
+  "price": 29.99,
+  "stock_quantity": 100,
+  "category_id": null,
+  "image_url": "https://imgur.com/gallery/carefully-curated-vol-528-tTgoBuZ",
+  "is_active": true
+}

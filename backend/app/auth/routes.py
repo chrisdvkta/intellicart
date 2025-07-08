@@ -1,13 +1,9 @@
-from enum import verify
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse, RedirectResponse
 from app.auth.service import AuthService
-from app.auth.utils import generate_hash, verify_hash
 from app.config import Config
 from app.db.main import sessionInstance
-from app.models.user import User
 from app.auth.dependencies import current_user_data
-from starlette.status import HTTP_200_OK
 
 auth_router = APIRouter()
 auth_service = AuthService()
