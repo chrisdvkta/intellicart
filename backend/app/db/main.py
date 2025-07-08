@@ -9,18 +9,15 @@ from app.config import Config
 engine = create_async_engine(Config.DATABASE_URL, echo=True)
 
 
-# ✅ Initialize DB
 async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
 
 
-# ✅ Dependency
 async def get_session():
     Session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
     async with Session() as session:
         yield session
 
 
-# ✅ Dependency alias
 sessionInstance = Annotated[AsyncSession, Depends(get_session)]

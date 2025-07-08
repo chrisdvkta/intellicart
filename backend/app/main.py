@@ -1,5 +1,6 @@
 from fastapi import APIRouter, FastAPI
 from app.auth.routes import auth_router
+from app.products.routes import product_router
 from app.db.main import init_db
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -18,6 +19,7 @@ async def root():
 
 v1_router = APIRouter(prefix="/v1")
 v1_router.include_router(auth_router, prefix="/auth", tags=["Authentication"])
+v1_router.include_router(product_router, tags=["Products"])
 app.include_router(v1_router)
 
 app.add_middleware(
