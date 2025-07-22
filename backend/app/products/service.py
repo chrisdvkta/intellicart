@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlalchemy import Select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.product import Product, ProductCreate
@@ -23,3 +24,15 @@ class ProductService:
         await session.refresh(new_product)
 
         return new_product
+
+    async def fetch_all_products(self, session: AsyncSession):
+        statement = Select(Product)
+        result = await session.execute(statement)
+        print(result)
+        return result
+
+    async def fetch_product(self, product_id: int, session: AsyncSession):
+        statement = Select(Product).where(Product.id == product_id)
+        result = await session.execute(statement)
+        product = result.scalar_one_or_none()
+        return product

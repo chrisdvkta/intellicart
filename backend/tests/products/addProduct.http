@@ -1,9 +1,10 @@
 POST http://localhost:8000/v1/products
 Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSJ9LCJleHAiOjE3NTI5MTA0NDV9.SEu2n14bydDV5uc2krS-ZCTpt9mA40LSnncLQqDydgE
 
 {
-"name": "Wireless Mouse",
-  "description": "Ergonomic wireless mouse with USB receiver",
+"name": " Mouse",
+  "description": "samrat's wireless mouse with USB receiver",
   "price": 29.99,
   "stock_quantity": 100,
   "category_id": null,
