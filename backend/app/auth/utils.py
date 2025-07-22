@@ -22,6 +22,7 @@ def verify_hash(hash: str, passwd: str) -> bool:
 def decode_token(token: str):
     try:
         payload = jwt.decode(token, Config.SECRET_KEY, algorithms=["HS256"])
+        print("RECEIVED PAYLOAD AFTER SENDING TOKEN ", payload)
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(
