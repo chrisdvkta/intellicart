@@ -1,0 +1,13 @@
+PUT http://localhost:8000/v1/products/2
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSJ9LCJleHAiOjE3NTMzMzgyMjB9.JFLs5FEs9c4j59yXyGcc85YTUfXdiZN4l97IMj7zlrc
+
+{
+  "name": "Mouse",
+  "description": "Updated description",
+  "price": 29.99,
+  "stock_quantity": 120,
+  "category_id": null,
+  "image_url": "https://imgur.com/gallery/carefully-curated-vol-528-tTgoBuZ",
+  "is_active": true
+}
