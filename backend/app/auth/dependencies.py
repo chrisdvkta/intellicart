@@ -32,7 +32,8 @@ async def get_current_user(
     session: sessionInstance, tokenData: dict = Depends(AccessTokenBearer())
 ):
     email = tokenData["user"]["email"]
-    user = await auth_service.get_user_by_email(email, session)
+    admin = tokenData["user"]["admin"]
+    user = await auth_service.get_user_by_email(email, admin, session)
     if not user:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="User not found")
     return user

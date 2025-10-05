@@ -62,12 +62,18 @@ class AuthService:
             return access_token, tokens.get("refresh_token", "")
 
     async def manual_register(
-        self, email: str, password: str, name: str, session: AsyncSession
+        self, email: str, password: str, name: str, role: str, session: AsyncSession
     ):
         if await self.get_user_by_email(email, session):
             raise ValueError("User already exists")
 
-        user = User(email=email, password=generate_hash(password), name=name)
+        print(role)
+        print(password)
+        if role == "ADMIN":
+            userRole = True
+        user = User(
+            email=email, password=generate_hash(password), name=name, admin=userRole
+        )
         session.add(user)
         await session.commit()
         return user

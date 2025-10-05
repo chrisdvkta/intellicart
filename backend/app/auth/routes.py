@@ -36,7 +36,7 @@ async def auth_via_google(code: str, session: sessionInstance):
 async def register(body: dict, session: sessionInstance):
     try:
         await auth_service.manual_register(
-            body["email"], body["password"], body["name"], session
+            body["email"], body["password"], body["name"], body["role"], session
         )
         return {"message": "Registered successfully"}
     except ValueError as e:

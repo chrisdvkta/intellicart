@@ -11,6 +11,7 @@ async def get_current_token(authorization: Optional[str] = Header(None)):
     token = authorization[len("Bearer ") :]
     try:
         payload = decode_token(token)
+        print(payload)
         if payload:
             return token
     except HTTPException:

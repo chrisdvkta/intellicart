@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import Optional
-from sqlalchemy.dialects.postgresql import UUID, JSONB, ARRAY, BYTEA, ENUM, TIMESTAMP
+from sqlalchemy.dialects.postgresql import ENUM, TIMESTAMP
 
 from sqlmodel import Column, Field, SQLModel
 
@@ -27,7 +27,8 @@ class User(SQLModel, table=True):
         sa_column=Column(ENUM(ProviderEnum), nullable=True),
     )
     refreshToken: Optional[str] = Field(exclude=True)
-    status: int = Field(default=1)
+    status: Optional[int] = Field(default=1)
+    admin: bool = Field(default=False)
 
     def __repr__(self):
         return f"<User {self.email}>"
