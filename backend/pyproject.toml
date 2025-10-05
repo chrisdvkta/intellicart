@@ -5,5 +5,15 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi[standard]>=0.115.12",
+    "fastapi[standard]>=0.115.14",
+    "sqlmodel>=0.0.24",
+    "pyjwt>=2.10.1",
+    "passlib[bcrypt]>=1.7.4",
+    "python-multipart>=0.0.20",
+    "alembic>=1.16.2",
+    "asyncpg>=0.30.0",
+"bcrypt>=4.0.0,<5.0.0",  
+"passlib[bcrypt]>=1.7.4",    
+"pydantic-settings>=2.10.1",
+    "requests>=2.32.4",
 ]

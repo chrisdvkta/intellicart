@@ -1,10 +1,41 @@
-# Python-generated files
+# Python
 __pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.sqlite3
+*.env
+.env.*
 
-# Virtual environments
-.venv
+# Virtualenv
+.venv/
+env/
+venv/
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs and local dev stuff
+*.log
+*.bak
+*.tmp
+
+# Migrations (optional)
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+alembic.ini
+
+# Docker
+*.pid
+*.sock
+*.db
+*.tar
+*.img
+*.log
+*.container
+.dockerignore
+
+# V
