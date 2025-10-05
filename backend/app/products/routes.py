@@ -1,9 +1,7 @@
 from typing import Annotated
-from fastapi import APIRouter, Body, Depends
-from fastapi.encoders import jsonable_encoder
-from requests import session
+from fastapi import APIRouter, Body, Depends, status
 
-from app.models.product import Product, ProductCreate
+from app.models.product import ProductCreate
 from app.products.service import ProductService
 from app.db.main import sessionInstance
 from app.utils import get_current_token
@@ -42,6 +40,11 @@ async def update_product(
     return await product_service.update_product(product_id, product, session)
 
 
-# @product_router.put("/product/{id}")
-# async def update_product(item_id: str, product):
-# update_product_encoded = jsonable_encoder()
+@product_router.post("/products/{product_id}/buy", status_code=status.HTTP_200_OK)
+async def buy_product(
+    product_id: int,
+    token: Annotated[str, Depends(get_current_token)],
+    session: sessionInstance,
+):
+    print("user token : ", token)
+    return await product_service.buy_product(product_id, session)

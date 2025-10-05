@@ -1,4 +1,5 @@
 from datetime import datetime
+from fastapi import HTTPException, status
 from sqlalchemy import Select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -28,13 +29,17 @@ class ProductService:
     async def fetch_all_products(self, session: AsyncSession):
         statement = Select(Product)
         result = await session.execute(statement)
-        print(result)
-        return result
+        return result.scalars().all()
 
     async def fetch_product(self, product_id: int, session: AsyncSession):
         statement = Select(Product).where(Product.id == product_id)
         result = await session.execute(statement)
         product = result.scalar_one_or_none()
+        if not product:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Product with id {product_id} not found",
+            )
         return product
 
     async def update_product(
@@ -45,7 +50,10 @@ class ProductService:
         product = result.scalar_one_or_none()
 
         if not product:
-            return {"error": "product not found"}
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Product with id {product_id} not found",
+            )
 
         product.name = data.name
         product.description = data.description
@@ -60,4 +68,18 @@ class ProductService:
         await session.commit()
         await session.refresh(product)
 
+        return product
+
+    async def buy_product(self, product_id: int, session: AsyncSession):
+        product = await self.fetch_product(product_id, session)
+        if not product.is_active or product.stock_quantity <= 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Product is not available for purchase",
+            )
+        product.stock_quantity -= 1
+        product.updated_at = datetime.now()
+        session.add(product)
+        await session.commit()
+        await session.refresh(product)
         return product

@@ -3,8 +3,9 @@ POST http://localhost:8000/v1/auth/register
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "testing@example.com",
   "name":"krish testing",
+  "role":"ADMIN",
   "password": "secret123"
 }
 
@@ -15,7 +16,7 @@ POST http://localhost:8000/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "testing@example.com",
   "password": "secret123"
 }
 

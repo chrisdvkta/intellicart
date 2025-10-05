@@ -8,7 +8,9 @@ from app.config import Config
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 3000
-passwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+passwd_context = CryptContext(
+    schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=12, bcrype__min_rounds=10
+)
 
 
 def generate_hash(passwd: str) -> str:
