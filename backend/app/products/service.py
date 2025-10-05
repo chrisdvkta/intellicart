@@ -3,11 +3,22 @@ from fastapi import HTTPException, status
 from sqlalchemy import Select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.models.category import Category
 from app.models.product import Product, ProductCreate
 
 
 class ProductService:
     async def add_product(self, data: ProductCreate, session: AsyncSession):
+        if data.category_id:
+            category_statement = Select(Category).where(Category.id == data.category_id)
+            result = await session.execute(category_statement)
+            category = result.scalar_one_or_none()
+
+        if not category:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Category with id {data.category_id} does not exist",
+            )
         new_product = Product(
             name=data.name,
             description=data.description,
