@@ -1,0 +1,48 @@
+### Orders API Tests
+### Use these with VS Code REST Client extension
+
+### =============================================================================
+### CREATE ORDER FROM CART
+### =============================================================================
+
+POST http://localhost:8000/v1/orders/from-cart?cart_id=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+Content-Type: application/json
+
+{
+  "shipping_address": "123 Main St, City, State 12345",
+  "payment_method": "cash_on_delivery"
+}
+
+### =============================================================================
+### GET USER ORDERS
+### =============================================================================
+
+GET http://localhost:8000/v1/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+
+### =============================================================================
+### GET ORDER DETAILS
+### =============================================================================
+
+GET http://localhost:8000/v1/orders/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+
+### =============================================================================
+### UPDATE ORDER STATUS (Admin Only)
+### =============================================================================
+
+PATCH http://localhost:8000/v1/orders/1/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2MjQ0NjQwMH0.test_signature
+Content-Type: application/json
+
+{
+  "status": "confirmed"
+}
+
+### =============================================================================
+### CANCEL ORDER
+### =============================================================================
+
+POST http://localhost:8000/v1/orders/1/cancel
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature

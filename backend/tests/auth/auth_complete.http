@@ -1,0 +1,54 @@
+### Authentication API Tests
+### Use these with VS Code REST Client extension
+
+### =============================================================================
+### MANUAL REGISTRATION
+### =============================================================================
+
+POST http://localhost:8000/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123",
+  "name": "Admin User",
+  "role": "admin"
+}
+
+###
+
+POST http://localhost:8000/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "user123",
+  "name": "Regular User",
+  "role": "user"
+}
+
+### =============================================================================
+### MANUAL LOGIN
+### =============================================================================
+
+POST http://localhost:8000/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+### =============================================================================
+### GET USER PROFILE
+### =============================================================================
+
+GET http://localhost:8000/v1/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2MjQ0NjQwMH0.test_signature
+
+### =============================================================================
+### GOOGLE OAUTH (for reference - requires actual OAuth setup)
+### =============================================================================
+
+# GET http://localhost:8000/auth/google
+# GET http://localhost:8000/auth/google/callback?code=your_oauth_code
