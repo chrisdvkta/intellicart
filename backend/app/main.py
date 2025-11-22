@@ -5,6 +5,7 @@ from app.category.routes import category_router
 from app.payment.routes import payment_router
 from app.cart.routes import cart_router
 from app.order.routes import order_router
+from app.recommendations.routes import recommendation_router
 from app.db.main import init_db
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -28,6 +29,7 @@ v1_router.include_router(cart_router, tags=["Carts"])
 v1_router.include_router(payment_router, tags=["Payments"])
 v1_router.include_router(category_router, tags=["Categories"])
 v1_router.include_router(order_router, tags=["Orders"])
+v1_router.include_router(recommendation_router, tags=["Recommendations"])
 app.include_router(v1_router)
 
 app.add_middleware(
