@@ -34,6 +34,12 @@ export class CatalogService {
   async updateProduct(id: number, input: ProductInput) {
     return this.client.put<Product>(`/products/${id}`, input);
   }
+
+  async getRecommendations(seedProductId: number, limit = 6) {
+    return this.client.get<Product[]>(
+      `/recommendations?seed_product_id=${seedProductId}&limit=${limit}`
+    );
+  }
 }
 
 export const catalogService = (token?: string) => new CatalogService(token);

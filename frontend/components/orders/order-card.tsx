@@ -15,20 +15,20 @@ const statusColor: Record<Order["status"], string> = {
 
 export default function OrderCard({ order }: Props) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-white shadow-lg">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 text-slate-900 shadow-lg">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.25em] text-white/60">Order</p>
+          <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Order</p>
           <h3 className="text-xl font-semibold">#{order.id}</h3>
         </div>
         <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusColor[order.status]}`}>
           {order.status}
         </span>
       </div>
-      <p className="mt-2 text-sm text-white/70">Shipped to: {order.shipping_address}</p>
-      <div className="mt-3 flex items-center justify-between text-sm text-white/80">
+      <p className="mt-2 text-sm text-slate-600">Shipped to: {order.shipping_address}</p>
+      <div className="mt-3 flex items-center justify-between text-sm text-slate-700">
         <span>Payment: {order.payment_method}</span>
-        <span className="text-lg font-semibold text-emerald-200">${order.total_amount.toFixed(2)}</span>
+        <span className="text-lg font-semibold text-emerald-700">${order.total_amount.toFixed(2)}</span>
       </div>
     </div>
   );

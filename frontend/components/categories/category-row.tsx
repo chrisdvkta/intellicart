@@ -12,7 +12,7 @@ export default function CategoryRow({ categories }: Props) {
       {categories.map((category) => (
         <span
           key={category.id}
-          className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 backdrop-blur transition hover:-translate-y-0.5 hover:border-emerald-200/50 hover:text-white"
+          className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:text-emerald-700"
         >
           {category.name}
         </span>

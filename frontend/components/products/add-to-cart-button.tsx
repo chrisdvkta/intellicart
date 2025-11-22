@@ -1,7 +1,8 @@
 "use client";
 
-import { useTransition, useState } from "react";
+import { useTransition } from "react";
 import { addToCartAction } from "@/app/actions/cart";
+import { useToast } from "@/components/ui/toast-provider";
 
 interface Props {
   productId: number;
@@ -10,17 +11,16 @@ interface Props {
 
 export default function AddToCartButton({ productId, compact }: Props) {
   const [pending, startTransition] = useTransition();
-  const [message, setMessage] = useState<string | null>(null);
+  const { push } = useToast();
 
   const handleAdd = () => {
-    setMessage(null);
     startTransition(async () => {
       try {
         await addToCartAction(productId, 1);
-        setMessage("Added");
+        push("Added to cart", "success");
       } catch (error) {
         const msg = error instanceof Error ? error.message : "Unable to add";
-        setMessage(msg);
+        push(msg, "error");
       }
     });
   };
@@ -38,7 +38,6 @@ export default function AddToCartButton({ productId, compact }: Props) {
       >
         {pending ? "Adding..." : "Add to cart"}
       </button>
-      {message && <span className="text-xs text-white/70">{message}</span>}
     </div>
   );
 }
