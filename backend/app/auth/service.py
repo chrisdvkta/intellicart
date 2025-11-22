@@ -69,8 +69,10 @@ class AuthService:
 
         print(role)
         print(password)
+        userRole = False
         if role == "ADMIN":
             userRole = True
+
         user = User(
             email=email, password=generate_hash(password), name=name, admin=userRole
         )
@@ -79,10 +81,8 @@ class AuthService:
         return user
 
     async def login(self, email: str, password: str, session: AsyncSession):
-        print("ENTRY")
         user = await self.get_user_by_email(email, session)
         print(user)
         if not user or not verify_hash(user.password, password):
             return None
-        print(user.password)
-        return create_access_token({"user": {"email": user.email}})
+        return create_access_token({"user": {"email": user.email, "admin": user.admin}})

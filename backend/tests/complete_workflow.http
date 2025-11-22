@@ -1,0 +1,204 @@
+### COMPLETE E-COMMERCE WORKFLOW (header Bearer tokens)
+### Use with VS Code REST Client. Replace placeholders:
+### <ADMIN_TOKEN> from step 3 login, <USER_TOKEN> from step 6 login
+### <CATEGORY_ID> from category creation, <PRODUCT_ID> from product creation
+### <ORDER_ID> from order creation, <PAYMENT_ID> from payment creation (optional)
+### Enums:
+###   OrderStatus: pending | confirmed | processing | shipped | delivered | cancelled
+###   PaymentStatus: pending | processing | succeeded | failed | refunded
+###   PaymentMethod: cash_on_delivery | card | bank_transfer
+### Run in order from top to bottom
+
+### =============================================================================
+### 1. REGISTER ADMIN USER
+### =============================================================================
+POST http://localhost:8000/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123",
+  "name": "Admin User",
+  "role": "ADMIN"
+}
+
+### =============================================================================
+### 2. REGISTER REGULAR USER
+### =============================================================================
+POST http://localhost:8000/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "user123",
+  "name": "Regular User",
+  "role": "USER"
+}
+
+### =============================================================================
+### 3. LOGIN AS ADMIN (copy token from response)
+### =============================================================================
+POST http://localhost:8000/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+### =============================================================================
+### 4. CREATE CATEGORIES (admin)
+### =============================================================================
+POST http://localhost:8000/v1/categories
+Authorization: Bearer <ADMIN_TOKEN>
+Content-Type: application/json
+
+{
+  "name": "Electronics",
+  "description": "Electronics and gadgets",
+  "image_url": "https://example.com/electronics.jpg",
+  "is_active": true
+}
+
+###
+
+POST http://localhost:8000/v1/categories
+Authorization: Bearer <ADMIN_TOKEN>
+Content-Type: application/json
+
+{
+  "name": "Clothing",
+  "description": "Fashion and apparel",
+  "image_url": "https://example.com/clothing.jpg",
+  "is_active": true
+}
+
+### =============================================================================
+### 5. CREATE PRODUCTS (admin)
+###    Update category_id with the IDs returned in step 4.
+### =============================================================================
+POST http://localhost:8000/v1/products
+Authorization: Bearer <ADMIN_TOKEN>
+Content-Type: application/json
+
+{
+  "name": "iPhone 15 Pro",
+  "description": "Latest iPhone with advanced features",
+  "price": 999.99,
+  "stock_quantity": 50,
+  "category_id": <CATEGORY_ID>,
+  "image_url": "https://example.com/iphone15pro.jpg",
+  "is_active": true
+}
+
+###
+
+POST http://localhost:8000/v1/products
+Authorization: Bearer <ADMIN_TOKEN>
+Content-Type: application/json
+
+{
+  "name": "Samsung Galaxy S24",
+  "description": "Android flagship smartphone",
+  "price": 899.99,
+  "stock_quantity": 30,
+  "category_id": <CATEGORY_ID>,
+  "image_url": "https://example.com/galaxy24.jpg",
+  "is_active": true
+}
+
+### =============================================================================
+### 6. LOGIN AS REGULAR USER (copy token from response)
+### =============================================================================
+POST http://localhost:8000/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "user123"
+}
+
+### =============================================================================
+### 7. ADD ITEMS TO CART (user)
+### =============================================================================
+POST http://localhost:8000/v1/cart/items
+Authorization: Bearer <USER_TOKEN>
+Content-Type: application/json
+
+{
+  "product_id": <PRODUCT_ID>,
+  "quantity": 2
+}
+
+### =============================================================================
+### 8. (OPTIONAL) VIEW CART (user)
+### =============================================================================
+GET http://localhost:8000/v1/cart
+Authorization: Bearer <USER_TOKEN>
+
+### =============================================================================
+### 9. CREATE ORDER FROM CART (user)
+###    Order status starts as pending.
+### =============================================================================
+POST http://localhost:8000/v1/orders/from-cart?cart_id=1
+Authorization: Bearer <USER_TOKEN>
+Content-Type: application/json
+
+{
+  "shipping_address": "123 Main St, City, State 12345",
+  "payment_method": "cash_on_delivery"
+}
+
+### =============================================================================
+### 10. CREATE PAYMENT FOR ORDER (user, COD path)
+###     COD sets order -> confirmed, payment -> pending (no Stripe required).
+### =============================================================================
+POST http://localhost:8000/v1/payments/create?order_id=<ORDER_ID>
+Authorization: Bearer <USER_TOKEN>
+Content-Type: application/json
+
+{
+  "payment_method": "cash_on_delivery"
+}
+
+### =============================================================================
+### 11. GET PAYMENT BY ORDER (user)
+### =============================================================================
+GET http://localhost:8000/v1/payments/order/<ORDER_ID>
+Authorization: Bearer <USER_TOKEN>
+
+### =============================================================================
+### 12. ADMIN: ADVANCE ORDER STATUS (confirmed -> processing -> shipped -> delivered)
+###     Body uses embed=True, so keep new_status inside the object.
+### =============================================================================
+PATCH http://localhost:8000/v1/orders/<ORDER_ID>/status
+Authorization: Bearer <ADMIN_TOKEN>
+Content-Type: application/json
+
+{
+  "new_status": "processing"
+}
+
+###
+PATCH http://localhost:8000/v1/orders/<ORDER_ID>/status
+Authorization: Bearer <ADMIN_TOKEN>
+Content-Type: application/json
+
+{
+  "new_status": "shipped"
+}
+
+###
+PATCH http://localhost:8000/v1/orders/<ORDER_ID>/status
+Authorization: Bearer <ADMIN_TOKEN>
+Content-Type: application/json
+
+{
+  "new_status": "delivered"
+}
+
+### =============================================================================
+### 13. GET ORDER DETAILS (user)
+### =============================================================================
+GET http://localhost:8000/v1/orders/<ORDER_ID>
+Authorization: Bearer <USER_TOKEN>

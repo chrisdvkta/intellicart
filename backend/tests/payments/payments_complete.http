@@ -1,0 +1,62 @@
+### Payments API Tests
+### Use these with VS Code REST Client extension
+
+### =============================================================================
+### CREATE PAYMENT INTENT (Cash on Delivery)
+### =============================================================================
+
+POST http://localhost:8000/v1/payments/create?order_id=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+Content-Type: application/json
+
+{
+  "payment_method": "cash_on_delivery"
+}
+
+### =============================================================================
+### CREATE STRIPE PAYMENT INTENT (Card Payment)
+### =============================================================================
+
+POST http://localhost:8000/v1/payments/create?order_id=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+Content-Type: application/json
+
+{
+  "payment_method": "card"
+}
+
+### =============================================================================
+### GET PAYMENT BY ORDER
+### =============================================================================
+
+GET http://localhost:8000/v1/payments/order/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+
+### =============================================================================
+### STRIPE WEBHOOK (Server-side endpoint - for testing)
+### =============================================================================
+
+POST http://localhost:8000/v1/payment/webhook
+Content-Type: application/json
+stripe-signature: t=1234567890,v1=test_signature
+
+{
+  "id": "evt_test_webhook",
+  "object": "event",
+  "type": "payment_intent.succeeded",
+  "data": {
+    "object": {
+      "id": "pi_test_payment_intent",
+      "amount": 100000,
+      "currency": "usd",
+      "status": "succeeded"
+    }
+  }
+}
+
+### =============================================================================
+### REFUND PAYMENT (Admin Only)
+### =============================================================================
+
+POST http://localhost:8000/v1/payments/1/refund
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2MjQ0NjQwMH0.test_signature

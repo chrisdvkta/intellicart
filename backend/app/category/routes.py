@@ -1,9 +1,9 @@
-from typing import Dict
 from fastapi import APIRouter, Depends, HTTPException
 from app.auth.dependencies import get_current_user
 from app.category.service import CategoryService
 from app.db.main import sessionInstance
 from app.models.category import CategoryCreate
+from app.models.user import User
 
 category_router = APIRouter()
 category_service = CategoryService()
@@ -18,9 +18,9 @@ async def get_categories(session: sessionInstance):
 async def create_categories(
     category: CategoryCreate,
     session: sessionInstance,
-    user: Dict = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ):
-    if user.get("role") != "admin":
+    if not getattr(user, "admin", False):
         raise HTTPException(status_code=403, detail="Admin access required")
 
     return await category_service.create_category(category, session)
@@ -36,17 +36,17 @@ async def update_category(
     id: int,
     category: CategoryCreate,
     session: sessionInstance,
-    user: Dict = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ):
-    if user.get("role") != "admin":
+    if not getattr(user, "admin", False):
         raise HTTPException(status_code=403, detail="Admin access required")
     return await category_service.update_category(id, category, session)
 
 
 @category_router.delete("/categories/{id}")
 async def delete_category(
-    id: int, session: sessionInstance, user: Dict = Depends(get_current_user)
+    id: int, session: sessionInstance, user: User = Depends(get_current_user)
 ):
-    if user.get("role") != "admin":
+    if not getattr(user, "admin", False):
         raise HTTPException(status_code=403, detail="Admin access required")
     return await category_service.delete_category(id, session)

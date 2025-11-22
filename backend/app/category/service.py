@@ -37,7 +37,7 @@ class CategoryService:
             )
 
         new_category = Category(**category_data.model_dump())
-        await session.add(new_category)
+        session.add(new_category)
         await session.commit()
         await session.refresh(new_category)
         return new_category
@@ -79,6 +79,6 @@ class CategoryService:
         if not category:
             raise HTTPException(status_code=404, detail="Category not found")
 
-        await session.delete(category)
+        session.delete(category)
         await session.commit()
         return {"message": "Category deleted successfully"}
