@@ -26,10 +26,10 @@ export default function ProductRow({ product }: Props) {
   };
 
   return (
-    <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-4 text-white">
+    <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 text-slate-900 shadow">
       <div>
         <div className="text-sm font-semibold">{product.name}</div>
-        <div className="text-xs text-white/60">
+        <div className="text-xs text-slate-600">
           ${product.price.toFixed(2)} · Stock {product.stock_quantity} · #{product.id}
         </div>
       </div>
@@ -38,8 +38,8 @@ export default function ProductRow({ product }: Props) {
         disabled={pending}
         className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
           product.is_active
-            ? "border border-white/20 text-white hover:border-red-200/60"
-            : "bg-emerald-400 text-slate-900 hover:-translate-y-0.5"
+            ? "border border-slate-300 text-slate-700 hover:border-red-300"
+            : "bg-emerald-500 text-white hover:-translate-y-0.5"
         } disabled:opacity-60`}
       >
         {pending ? "Saving..." : product.is_active ? "Deactivate" : "Activate"}

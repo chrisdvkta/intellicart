@@ -6,11 +6,11 @@ const perks = [
 
 export default function Perks() {
   return (
-    <div className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 sm:grid-cols-3">
+    <div className="grid gap-4 rounded-3xl border border-slate-200 bg-white p-4 sm:grid-cols-3 shadow-lg">
       {perks.map((perk) => (
-        <div key={perk.title} className="rounded-2xl border border-white/5 bg-slate-950/60 p-4 text-white">
-          <h3 className="text-sm font-semibold">{perk.title}</h3>
-          <p className="text-sm text-white/70">{perk.detail}</p>
+        <div key={perk.title} className="rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-sm">
+          <h3 className="text-sm font-semibold text-slate-900">{perk.title}</h3>
+          <p className="text-sm text-slate-600">{perk.detail}</p>
         </div>
       ))}
     </div>

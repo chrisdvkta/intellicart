@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617;
-  --foreground: #e2e8f0;
+  --background: #f7f7fb;
+  --foreground: #0f172a;
 }
 
 @theme inline {
@@ -19,6 +19,9 @@
 body {
   font-family: var(--font-body), "Inter", system-ui, -apple-system, sans-serif;
   color: var(--foreground);
+  background: radial-gradient(circle at 20% 20%, #f1f5ff 0, transparent 26%),
+    radial-gradient(circle at 80% 0%, #fff4ed 0, transparent 30%),
+    var(--background);
 }
 
 h1,
@@ -29,9 +32,28 @@ h4 {
 }
 
 .glass-panel {
-  @apply border border-white/10 bg-white/5 backdrop-blur-xl;
+  @apply border border-slate-200/60 bg-white/70 backdrop-blur-xl shadow-xl;
 }
 
 .card {
-  @apply rounded-3xl border border-white/5 bg-slate-950/40 shadow-xl;
+  @apply rounded-3xl border border-slate-200 bg-white shadow-xl;
+}
+
+@keyframes plasma-rotate {
+  from {
+    --angle: 0deg;
+    transform: rotate(0deg) scale(1.05);
+  }
+  to {
+    --angle: 360deg;
+    transform: rotate(360deg) scale(1.05);
+  }
+}
+
+.animate-plasma {
+  animation: plasma-rotate 16s linear infinite;
+}
+
+.animate-plasma-slow {
+  animation: plasma-rotate 26s linear infinite;
 }
