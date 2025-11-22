@@ -1,0 +1,48 @@
+### Cart API Tests
+### Use these with VS Code REST Client extension
+
+### =============================================================================
+### GET USER CART
+### =============================================================================
+
+GET http://localhost:8000/v1/cart
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+
+### =============================================================================
+### ADD ITEM TO CART
+### =============================================================================
+
+POST http://localhost:8000/v1/cart/items
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "quantity": 2
+}
+
+### =============================================================================
+### UPDATE CART ITEM
+### =============================================================================
+
+PUT http://localhost:8000/v1/cart/items/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+### =============================================================================
+### REMOVE ITEM FROM CART
+### =============================================================================
+
+DELETE http://localhost:8000/v1/cart/items/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature
+
+### =============================================================================
+### CLEAR ENTIRE CART
+### =============================================================================
+
+DELETE http://localhost:8000/v1/cart
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYyNDQ2NDAwfQ.user_signature

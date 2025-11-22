@@ -4,8 +4,6 @@ from typing import List
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from app.models.product import Product
-
 
 class OrderStatus(str, Enum):
     PENDING = "pending"
@@ -26,7 +24,7 @@ class Order(SQLModel, table=True):
     payment_method: str
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
-    items: List["OrderItem"] = Relationship(back_populates="order")
+    # items: List["OrderItem"] = Relationship(back_populates="order")
 
 
 class OrderItem(SQLModel, table=True):
@@ -37,7 +35,7 @@ class OrderItem(SQLModel, table=True):
     quantity: int = Field(gt=0)
     price_at_time: float
     created_at: datetime = Field(default_factory=datetime.now)
-    order: Order = Relationship(back_populates="items")
+    # order: Order = Relationship(back_populates="items")
 
 
 class OrderCreate(SQLModel):
@@ -50,7 +48,15 @@ class OrderItemCreate(SQLModel):
     quantity: int = Field(default=1, gt=0)
 
 
-class OrderResponse(Order):
+class OrderResponse(SQLModel):
     """Response model that includes order items"""
 
+    id: int
+    user_id: int
+    total_amount: float
+    status: OrderStatus
+    shipping_address: str
+    payment_method: str
+    created_at: datetime
+    updated_at: datetime
     items: List["OrderItem"] = []

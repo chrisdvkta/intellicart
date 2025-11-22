@@ -1,0 +1,66 @@
+### Categories API Tests
+### Use these with VS Code REST Client extension
+
+### =============================================================================
+### GET ALL CATEGORIES
+### =============================================================================
+
+GET http://localhost:8000/v1/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2MjQ0NjQwMH0.test_signature
+
+### =============================================================================
+### CREATE CATEGORY (Admin Only)
+### =============================================================================
+
+POST http://localhost:8000/v1/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2MjQ0NjQwMH0.test_signature
+Content-Type: application/json
+
+{
+  "name": "Electronics",
+  "description": "Electronic devices and gadgets",
+  "image_url": "https://example.com/electronics.jpg",
+  "is_active": true
+}
+
+###
+
+POST http://localhost:8000/v1/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2MjQ0NjQwMH0.test_signature
+Content-Type: application/json
+
+{
+  "name": "Clothing",
+  "description": "Fashion and apparel",
+  "image_url": "https://example.com/clothing.jpg",
+  "is_active": true
+}
+
+### =============================================================================
+### GET SPECIFIC CATEGORY
+### =============================================================================
+
+GET http://localhost:8000/v1/category/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2MjQ0NjQwMH0.test_signature
+
+### =============================================================================
+### UPDATE CATEGORY (Admin Only)
+### =============================================================================
+
+PUT http://localhost:8000/v1/categories/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2MjQ0NjQwMH0.test_signature
+Content-Type: application/json
+
+{
+  "name": "Electronics Updated",
+  "description": "Updated electronic devices and gadgets",
+  "image_url": "https://example.com/electronics_updated.jpg",
+  "is_active": true
+}
+
+### =============================================================================
+### DELETE CATEGORY (Admin Only)
+### =============================================================================
+
+DELETE http://localhost:8000/v1/categories/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2MjQ0NjQwMH0.test_signature
