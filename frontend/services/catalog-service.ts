@@ -52,6 +52,10 @@ export class CatalogService {
       `/recommendations?seed_product_id=${seedProductId}&limit=${limit}`
     );
   }
+
+  async getCartRecommendations(limit = 6) {
+    return this.client.get<Product[]>(`/recommendations/cart?limit=${limit}`);
+  }
 }
 
 export const catalogService = (token?: string) => new CatalogService(token);

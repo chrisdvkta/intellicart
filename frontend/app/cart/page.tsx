@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CartItemCard, { CartLine } from "@/components/cart/cart-item-card";
 import CheckoutForm from "@/components/cart/checkout-form";
+import Recommendations from "@/components/products/recommendations";
 import { cartService } from "@/services/cart-service";
 import { catalogService } from "@/services/catalog-service";
 import { getSessionToken } from "@/lib/session";
@@ -10,7 +11,7 @@ const buildCartLines = async () => {
   if (!token) return null;
 
   const cartApi = cartService(token);
-  const catalog = catalogService();
+  const catalog = catalogService(token);
   const summary = await cartApi.getCart().catch(() => null);
   if (!summary) return null;
 
@@ -32,7 +33,12 @@ const buildCartLines = async () => {
     };
   });
 
-  return { summary, lines };
+  const recommendations =
+    lines.length > 0
+      ? await catalog.getCartRecommendations(6).catch(() => [])
+      : [];
+
+  return { summary, lines, recommendations };
 };
 
 export default async function CartPage() {
@@ -55,7 +61,7 @@ export default async function CartPage() {
     );
   }
 
-  const { summary, lines } = cartData;
+  const { summary, lines, recommendations } = cartData;
 
   return (
     <div className="space-y-8">
@@ -72,13 +78,18 @@ export default async function CartPage() {
           Your cart is empty. Add something you love.
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="space-y-4">
-            {lines.map((line) => (
-              <CartItemCard key={line.id} line={line} />
-            ))}
+        <div className="space-y-8">
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="space-y-4">
+              {lines.map((line) => (
+                <CartItemCard key={line.id} line={line} />
+              ))}
+            </div>
+            <CheckoutForm />
           </div>
-          <CheckoutForm />
+          {!!recommendations.length && (
+            <Recommendations products={recommendations} />
+          )}
         </div>
       )}
     </div>
