@@ -12,7 +12,9 @@ from app.models.payment import Payment, PaymentStatus, PaymentMethod
 class PaymentService:
     def __init__(self, stripe_api_key: str):
         """Initialize with Stripe API key from environment"""
-        stripe.api_key = stripe_api_key
+        self.stripe_enabled = bool(stripe_api_key) and "YOUR_KEY_HERE" not in stripe_api_key
+        if self.stripe_enabled:
+            stripe.api_key = stripe_api_key
 
     async def create_payment_intent(
         self,
@@ -68,13 +70,14 @@ class PaymentService:
             return new_payment
 
         # stripe (requires a valid API key)
-        if not stripe.api_key or "YOUR_KEY_HERE" in stripe.api_key:
+        if payment_method != PaymentMethod.CASH_ON_DELIVERY and not self.stripe_enabled:
             raise HTTPException(
-                status_code=400, detail="Stripe is not configured; use cash_on_delivery"
+                status_code=400,
+                detail="Stripe is not configured. Set STRIPE_SECRET_KEY to enable card or bank_transfer payments.",
             )
         # stripe
         try:
-            amount_cents = int(order.total_amount * 100)
+            amount_cents = int(round(order.total_amount * 100))
             payment_intent = stripe.PaymentIntent.create(
                 amount=amount_cents,
                 currency="usd",
@@ -173,6 +176,11 @@ class PaymentService:
                 status_code=400, detail="Can only refund succeeded payments"
             )
         if payment.stripe_payment_intent_id:
+            if not self.stripe_enabled:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Stripe is not configured. Cannot issue a refund.",
+                )
             try:
                 stripe.Refund.create(payment_intent=payment.stripe_payment_intent_id)
             except stripe.error.StripeError as e:

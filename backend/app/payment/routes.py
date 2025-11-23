@@ -1,9 +1,9 @@
-import os
 from typing import Dict
 from fastapi import APIRouter, Body, Depends, HTTPException, Request
 import stripe
 
 from app.auth.dependencies import get_current_user
+from app.config import Config
 from app.payment.service import PaymentService
 from app.db.main import sessionInstance
 from app.models.payment import PaymentMethod
@@ -12,8 +12,8 @@ from app.models.payment import PaymentMethod
 payment_router = APIRouter()
 
 # Initialize payment service with Stripe key from environment
-STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "sk_test_YOUR_KEY_HERE")
-STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "whsec_YOUR_WEBHOOK_SECRET")
+STRIPE_SECRET_KEY = Config.STRIPE_SECRET_KEY or ""
+STRIPE_WEBHOOK_SECRET = Config.STRIPE_WEBHOOK_SECRET or ""
 payment_service = PaymentService(stripe_api_key=STRIPE_SECRET_KEY)
 
 
@@ -63,6 +63,11 @@ async def get_payment_by_order(
 async def stripe_webhook(request: Request, session: sessionInstance):
     """Handle Stripe webhook events"""
 
+    if not STRIPE_WEBHOOK_SECRET:
+        raise HTTPException(
+            status_code=500, detail="Stripe webhook secret not configured"
+        )
+
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
 
@@ -75,7 +80,7 @@ async def stripe_webhook(request: Request, session: sessionInstance):
     except stripe.error.SignatureVerificationError:
         raise HTTPException(status_code=400, detail="Invalid signature")
 
-    if event["type"] == "payment_intent:succeeded":
+    if event["type"] == "payment_intent.succeeded":
         payment_intent = event["data"]["object"]
         await payment_service.handle_payment_webhook(
             payment_intent_id=payment_intent["id"], status="succeeded", session=session

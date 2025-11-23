@@ -2,6 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
+from pydantic import ConfigDict
 from sqlmodel import Field, SQLModel
 
 
@@ -21,12 +22,15 @@ class PaymentMethod(str, Enum):
 
 class Payment(SQLModel, table=True):
     __tablename__ = "payments"
+    model_config = ConfigDict(populate_by_name=True)
 
     id: int = Field(default=None, primary_key=True)
     order_id: int = Field(foreign_key="orders.id", unique=True)
 
     stripe_payment_intent_id: Optional[str] = Field(default=None, unique=True)
-    stripe_client_secret: Optional[str] = None
+    stripe_client_secret: Optional[str] = Field(
+        default=None, alias="client_secret", description="Stripe client secret"
+    )
 
     amount: float = Field(gt=0)
     currency: str = Field(default="usd")

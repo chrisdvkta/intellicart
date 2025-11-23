@@ -37,3 +37,8 @@ Non-Functional Requirements Specification
 • System Reliability: High availability, error logging, and graceful handling of ML service failures.
 • Performance Optimization: Fast-loading product catalog (under 2 seconds) and recommendation generation within 500ms.
 • Security & Maintainability: JWT-secured API routes, admin-only product management, modular ML service design, and thorough API/ML documentation.
+
+## Stripe setup (local)
+- Add `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` to `.env` (see Stripe Dashboard and `stripe listen` output).
+- Run the FastAPI server, then forward webhooks with the helper: `./scripts/stripe-listen.sh` (uses `STRIPE_FORWARD_TO` if you need a custom URL, default is `localhost:8000/v1/payment/webhook`).
+- If the Stripe CLI is missing, the script will try to install it via Homebrew/apt/choco/scoop; otherwise it will print the manual install link.

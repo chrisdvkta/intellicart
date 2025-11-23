@@ -12,6 +12,8 @@ type CheckoutResult = {
   orderId?: number;
   paymentId?: number;
   status?: string;
+  paymentMethod?: PaymentMethod;
+  clientSecret?: string;
 };
 
 export async function checkoutAction(_: CheckoutResult, formData: FormData): Promise<CheckoutResult> {
@@ -47,6 +49,8 @@ export async function checkoutAction(_: CheckoutResult, formData: FormData): Pro
       orderId: order.id,
       paymentId: payment.id,
       status: payment.status,
+      paymentMethod: payment.payment_method,
+      clientSecret: payment.client_secret,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Checkout failed";
