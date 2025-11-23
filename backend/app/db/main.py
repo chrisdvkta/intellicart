@@ -7,7 +7,6 @@ from app.auth.utils import generate_hash
 from app.models.user import User
 from app.config import Config
 
-# ✅ Proper async engine
 engine = create_async_engine(Config.DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
