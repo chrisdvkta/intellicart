@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
-import { useFormState } from "react-dom";
+import { useActionState, useEffect } from "react";
 import { checkoutAction } from "@/app/actions/order";
 import { useToast } from "@/components/ui/toast-provider";
 
 const initialState = { error: "", orderId: undefined as number | undefined, paymentId: undefined as number | undefined, status: "" };
 
 export default function CheckoutForm() {
-  const [state, formAction] = useFormState(checkoutAction, initialState);
+  const [state, formAction] = useActionState(checkoutAction, initialState);
   const { push } = useToast();
 
   useEffect(() => {

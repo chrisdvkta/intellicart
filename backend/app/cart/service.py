@@ -81,7 +81,9 @@ class CartService:
             await session.refresh(new_item)
             return new_item
 
-    async def get_cart_with_items(self, cart_id: int, session: AsyncSession):
+    async def get_cart_with_items(
+        self, cart_id: int, user_id: int, session: AsyncSession
+    ):
         statement = select(Cart).where(Cart.id == cart_id)
         result = await session.execute(statement)
         cart = result.scalar_one_or_none()
