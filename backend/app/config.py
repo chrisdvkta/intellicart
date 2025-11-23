@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_SECRET: str
     GOOGLE_REDIRECT_URI: str
     SECRET_KEY: str
+    ADMIN_EMAIL: str = "admin@example.com"
+    ADMIN_PASSWORD: str = "admin123"
+    ADMIN_NAME: str = "Admin User"
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 
