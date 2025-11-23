@@ -37,7 +37,7 @@ export default function CartItemCard({ line }: Props) {
   return (
     <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="relative h-20 w-20 overflow-hidden rounded-xl border border-white/5">
-        <Image src={line.image || "/placeholder.svg"} alt={line.name} fill className="object-cover" sizes="80px" />
+        <Image src={line.image || "/placeholder.png"} alt={line.name} fill className="object-cover" sizes="80px" />
       </div>
       <div className="flex flex-1 flex-col gap-1">
         <div className="flex items-center justify-between gap-2">

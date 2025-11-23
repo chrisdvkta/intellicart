@@ -4,7 +4,7 @@ import { getSessionUser } from "@/lib/session";
 import { APP_NAME } from "@/lib/config";
 
 export default async function NavBar() {
-  const user = getSessionUser();
+  const user = await getSessionUser();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/90 backdrop-blur">

@@ -7,9 +7,8 @@ import { getSessionToken, getSessionUser } from "@/lib/session";
 import type { ActionResult } from "./auth";
 import type { ProductInput } from "@/lib/types";
 
-const requireAdmin = () => {
-  const user = getSessionUser();
-  const token = getSessionToken();
+const requireAdmin = async () => {
+  const [token, user] = await Promise.all([getSessionToken(), getSessionUser()]);
   if (!token || !user?.admin) {
     throw new Error("Admin access required");
   }
@@ -18,7 +17,7 @@ const requireAdmin = () => {
 
 export async function createCategoryAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
   try {
-    const { token } = requireAdmin();
+    const { token } = await requireAdmin();
     const name = formData.get("name")?.toString() ?? "";
     const description = formData.get("description")?.toString() ?? "";
     const image_url = formData.get("image_url")?.toString() || undefined;
@@ -37,7 +36,7 @@ export async function createCategoryAction(_: ActionResult, formData: FormData):
 
 export async function updateCategoryAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
   try {
-    const { token } = requireAdmin();
+    const { token } = await requireAdmin();
     const id = Number(formData.get("id") ?? 0);
     const name = formData.get("name")?.toString() ?? "";
     const description = formData.get("description")?.toString() ?? "";
@@ -57,7 +56,7 @@ export async function updateCategoryAction(_: ActionResult, formData: FormData):
 
 export async function deleteCategoryAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
   try {
-    const { token } = requireAdmin();
+    const { token } = await requireAdmin();
     const id = Number(formData.get("id") ?? 0);
     if (!id) return { error: "Missing category id" };
     await catalogService(token).deleteCategory(id);
@@ -71,7 +70,7 @@ export async function deleteCategoryAction(_: ActionResult, formData: FormData):
 
 export async function createProductAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
   try {
-    const { token } = requireAdmin();
+    const { token } = await requireAdmin();
     const payload: ProductInput = {
       name: formData.get("name")?.toString() ?? "",
       description: formData.get("description")?.toString() ?? "",
@@ -99,7 +98,7 @@ export async function createProductAction(_: ActionResult, formData: FormData): 
 
 export async function updateProductAction(formData: FormData): Promise<ActionResult> {
   try {
-    const { token } = requireAdmin();
+    const { token } = await requireAdmin();
     const id = Number(formData.get("id") ?? 0);
     if (!id) return { error: "Missing product id" };
 
@@ -129,7 +128,7 @@ export async function updateProductAction(formData: FormData): Promise<ActionRes
 
 export async function deleteProductAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
   try {
-    const { token } = requireAdmin();
+    const { token } = await requireAdmin();
     const id = Number(formData.get("id") ?? 0);
     if (!id) return { error: "Missing product id" };
     await catalogService(token).deleteProduct(id);
@@ -143,7 +142,7 @@ export async function deleteProductAction(_: ActionResult, formData: FormData): 
 
 export async function updateOrderStatusAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
   try {
-    const { token } = requireAdmin();
+    const { token } = await requireAdmin();
     const orderId = Number(formData.get("order_id") ?? 0);
     const newStatus = formData.get("new_status")?.toString();
     if (!orderId || !newStatus) return { error: "Order ID and status required" };

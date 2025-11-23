@@ -6,7 +6,7 @@ import { catalogService } from "@/services/catalog-service";
 import { getSessionToken } from "@/lib/session";
 
 const buildCartLines = async () => {
-  const token = getSessionToken();
+  const token = await getSessionToken();
   if (!token) return null;
 
   const cartApi = cartService(token);

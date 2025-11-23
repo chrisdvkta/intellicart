@@ -12,7 +12,7 @@ export default function ProductCard({ product }: Props) {
     <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl transition hover:-translate-y-1 hover:shadow-2xl">
       <div className="relative h-56 w-full overflow-hidden">
         <Image
-          src={product.image_url || "/placeholder.svg"}
+          src={product.image_url || "/placeholder.png"}
           alt={product.name}
           fill
           className="object-cover transition duration-500 group-hover:scale-105"

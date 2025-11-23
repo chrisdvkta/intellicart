@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { updateOrderStatusAction } from "@/app/actions/admin";
 import type { Order, OrderStatus } from "@/lib/types";
+import { useToast } from "@/components/ui/toast-provider";
 
 interface Props {
   orders: Order[];
@@ -13,6 +14,7 @@ const statuses: OrderStatus[] = ["pending", "confirmed", "processing", "shipped"
 export default function AdminOrderList({ orders }: Props) {
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [_, startTransition] = useTransition();
+  const { push } = useToast();
 
   const handleUpdate = (orderId: number, status: OrderStatus) => {
     startTransition(async () => {
@@ -20,7 +22,12 @@ export default function AdminOrderList({ orders }: Props) {
       const formData = new FormData();
       formData.set("order_id", String(orderId));
       formData.set("new_status", status);
-      await updateOrderStatusAction({}, formData);
+      const res = await updateOrderStatusAction({}, formData);
+      if (res?.error) {
+        push(res.error, "error");
+      } else {
+        push(`Order #${orderId} → ${status}`, "success");
+      }
       setPendingId(null);
     });
   };

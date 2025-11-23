@@ -4,6 +4,7 @@ from app.auth.dependencies import get_current_user
 from app.db.main import sessionInstance
 from app.order.service import OrderService
 from app.models.order import OrderCreate, OrderStatus
+from app.models.user import User
 
 order_router = APIRouter()
 order_service = OrderService()
@@ -31,6 +32,14 @@ async def get_user_orders(
 ):
     """Get user's order history"""
     return await order_service.get_user_orders(user_id=user.id, session=session)
+
+
+@order_router.get("/orders/all")
+async def get_all_orders(session: sessionInstance, user: User = Depends(get_current_user)):
+    """Admin: Get all orders"""
+    if not getattr(user, "admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return await order_service.get_all_orders(session=session)
 
 
 @order_router.get("/orders/{order_id}")

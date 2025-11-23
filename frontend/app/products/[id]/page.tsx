@@ -33,7 +33,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
       <div className="relative grid gap-8 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-xl backdrop-blur lg:grid-cols-[1.1fr_0.9fr]">
         <div className="relative min-h-[320px] overflow-hidden rounded-2xl border border-slate-200 bg-white">
           <Image
-            src={(product as Product).image_url || "/placeholder.svg"}
+            src={(product as Product).image_url || "/placeholder.png"}
             alt={(product as Product).name}
             fill
             className="object-cover"

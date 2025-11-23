@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { authService } from "@/services/auth-service";
 import { clearSession, setSessionToken } from "@/lib/session";
 
-export type ActionResult = { success?: string; error?: string };
+export type ActionResult = { success?: string; error?: string; redirectTo?: string };
 
 export async function loginAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
   const email = formData.get("email")?.toString() ?? "";
@@ -17,8 +17,8 @@ export async function loginAction(_: ActionResult, formData: FormData): Promise<
 
   try {
     const { token } = await authService.login(email, password);
-    setSessionToken(token);
-    redirect(redirectTo);
+    await setSessionToken(token);
+    return { success: "Logged in", redirectTo };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Login failed";
     return { error: message };
@@ -38,8 +38,8 @@ export async function registerAction(_: ActionResult, formData: FormData): Promi
   try {
     await authService.register({ email, password, name, role });
     const { token } = await authService.login(email, password);
-    setSessionToken(token);
-    redirect("/");
+    await setSessionToken(token);
+    return { success: "Account created", redirectTo: "/" };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Registration failed";
     return { error: message };
@@ -47,6 +47,6 @@ export async function registerAction(_: ActionResult, formData: FormData): Promi
 }
 
 export async function logoutAction() {
-  clearSession();
+  await clearSession();
   redirect("/");
 }

@@ -94,6 +94,11 @@ class OrderService:
         orders = result.scalars().all()
         return orders
 
+    async def get_all_orders(self, session: AsyncSession):
+        statement = select(Order).order_by(Order.created_at.desc())
+        result = await session.execute(statement)
+        return result.scalars().all()
+
     async def get_order_by_id(self, order_id: int, user_id: int, session: AsyncSession):
         statement = select(Order).where(Order.id == order_id)
         result = await session.execute(statement)

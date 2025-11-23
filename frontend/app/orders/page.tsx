@@ -4,7 +4,7 @@ import { orderService } from "@/services/order-service";
 import { getSessionToken } from "@/lib/session";
 
 const fetchOrders = async () => {
-  const token = getSessionToken();
+  const token = await getSessionToken();
   if (!token) return null;
   const orders = await orderService(token).getOrders().catch(() => []);
   return { orders };

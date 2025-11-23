@@ -13,7 +13,7 @@ const ensureToken = () => {
 };
 
 export async function addToCartAction(productId: number, quantity = 1) {
-  const token = ensureToken();
+  const token = await ensureToken();
   const cartApi = cartService(token);
   await cartApi.addItem(productId, quantity);
   revalidatePath("/cart");
@@ -21,7 +21,7 @@ export async function addToCartAction(productId: number, quantity = 1) {
 }
 
 export async function updateCartItemAction(itemId: number, quantity: number) {
-  const token = ensureToken();
+  const token = await ensureToken();
   const cartApi = cartService(token);
   await cartApi.updateQuantity(itemId, quantity);
   revalidatePath("/cart");
@@ -29,7 +29,7 @@ export async function updateCartItemAction(itemId: number, quantity: number) {
 }
 
 export async function removeCartItemAction(itemId: number) {
-  const token = ensureToken();
+  const token = await ensureToken();
   const cartApi = cartService(token);
   await cartApi.removeItem(itemId);
   revalidatePath("/cart");

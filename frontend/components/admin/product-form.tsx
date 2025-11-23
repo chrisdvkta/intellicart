@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { createProductAction } from "@/app/actions/admin";
 import type { Category } from "@/lib/types";
+import { useToast } from "@/components/ui/toast-provider";
 
 const initialState = { error: "", success: "" };
 
@@ -12,6 +13,12 @@ interface Props {
 
 export default function ProductForm({ categories }: Props) {
   const [state, formAction] = useActionState(createProductAction, initialState);
+  const { push } = useToast();
+
+  useEffect(() => {
+    if (state.success) push(state.success, "success");
+    if (state.error) push(state.error, "error");
+  }, [state.error, state.success, push]);
 
   return (
     <form action={formAction} className="space-y-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-xl">

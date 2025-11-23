@@ -10,6 +10,10 @@ export class OrderService {
     return this.client.get<Order[]>("/orders");
   }
 
+  async getAllOrders() {
+    return this.client.get<Order[]>("/orders/all");
+  }
+
   async getOrder(orderId: number) {
     return this.client.get<Order>(`/orders/${orderId}`);
   }

@@ -3,9 +3,9 @@ import { getSessionUser, getSessionToken } from "@/lib/session";
 import { orderService } from "@/services/order-service";
 
 export default async function AdminOrdersPage() {
-  const user = getSessionUser();
-  const token = getSessionToken();
-  const myOrders = token ? await orderService(token).getOrders().catch(() => []) : [];
+  const user = await getSessionUser();
+  const token = await getSessionToken();
+  const orders = token ? await orderService(token).getAllOrders().catch(() => []) : [];
 
   if (!user?.admin) {
     return (
@@ -24,7 +24,7 @@ export default async function AdminOrdersPage() {
         <p className="text-slate-600">Pick an order below and update its status instantly.</p>
       </div>
 
-      <AdminOrderList orders={myOrders.slice(0, 12)} />
+      <AdminOrderList orders={orders} />
 
       <div className="rounded-3xl border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-lg">
         <p className="font-semibold text-slate-900">Status flow</p>

@@ -1,13 +1,25 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { registerAction, ActionResult } from "@/app/actions/auth";
+import { useToast } from "@/components/ui/toast-provider";
 
 const initialState: ActionResult = {};
 
 export default function RegisterForm() {
   const [state, formAction] = useActionState(registerAction, initialState);
+  const { push } = useToast();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state.error) push(state.error, "error");
+    if (state.success) {
+      push(state.success, "success");
+      router.push(state.redirectTo || "/");
+    }
+  }, [state.error, state.success, state.redirectTo, push, router]);
 
   return (
     <form action={formAction} className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-xl">

@@ -15,7 +15,7 @@ type CheckoutResult = {
 };
 
 export async function checkoutAction(_: CheckoutResult, formData: FormData): Promise<CheckoutResult> {
-  const token = getSessionToken();
+  const token = await getSessionToken();
   if (!token) {
     return { error: "Please login to checkout." };
   }

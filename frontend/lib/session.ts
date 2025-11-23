@@ -1,14 +1,19 @@
 import { cookies } from "next/headers";
 import type { SessionUser } from "./types";
 
-export const getSessionToken = () => cookies().get("ic_token")?.value;
-
-export const clearSession = () => {
-  cookies().delete("ic_token");
+export const getSessionToken = async () => {
+  const store = await cookies();
+  return store.get("ic_token")?.value;
 };
 
-export const setSessionToken = (token: string) => {
-  cookies().set("ic_token", token, {
+export const clearSession = async () => {
+  const store = await cookies();
+  store.delete("ic_token");
+};
+
+export const setSessionToken = async (token: string) => {
+  const store = await cookies();
+  store.set("ic_token", token, {
     httpOnly: true,
     sameSite: "lax",
     secure: false,
@@ -17,8 +22,8 @@ export const setSessionToken = (token: string) => {
   });
 };
 
-export const getSessionUser = (): SessionUser | null => {
-  const token = getSessionToken();
+export const getSessionUser = async (): Promise<SessionUser | null> => {
+  const token = await getSessionToken();
   if (!token) return null;
 
   try {

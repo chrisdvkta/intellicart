@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getSessionUser } from "@/lib/session";
 
-export default function AdminHome() {
-  const user = getSessionUser();
+export default async function AdminHome() {
+  const user = await getSessionUser();
 
   if (!user?.admin) {
     return (

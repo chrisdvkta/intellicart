@@ -4,7 +4,7 @@ import { catalogService } from "@/services/catalog-service";
 import { getSessionUser } from "@/lib/session";
 
 export default async function AdminCategoriesPage() {
-  const user = getSessionUser();
+  const user = await getSessionUser();
   if (!user?.admin) {
     return (
       <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center text-slate-700 shadow-lg">
