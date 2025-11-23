@@ -18,6 +18,7 @@ class CartItem(SQLModel, table=True):
     quantity: int = Field(default=1, gt=0)
     price_at_time: float
     created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
 
 
 class CartCreate(SQLModel):
