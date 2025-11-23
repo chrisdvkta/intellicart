@@ -35,6 +35,40 @@ export async function createCategoryAction(_: ActionResult, formData: FormData):
   }
 }
 
+export async function updateCategoryAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
+  try {
+    const { token } = requireAdmin();
+    const id = Number(formData.get("id") ?? 0);
+    const name = formData.get("name")?.toString() ?? "";
+    const description = formData.get("description")?.toString() ?? "";
+    const image_url = formData.get("image_url")?.toString() || undefined;
+    const is_active = formData.get("is_active")?.toString() === "on";
+
+    if (!id || !name || !description) return { error: "All fields are required" };
+
+    await catalogService(token).updateCategory(id, { name, description, image_url, is_active });
+    revalidatePath("/admin/categories");
+    return { success: "Category updated" };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unable to update category";
+    return { error: message };
+  }
+}
+
+export async function deleteCategoryAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
+  try {
+    const { token } = requireAdmin();
+    const id = Number(formData.get("id") ?? 0);
+    if (!id) return { error: "Missing category id" };
+    await catalogService(token).deleteCategory(id);
+    revalidatePath("/admin/categories");
+    return { success: "Category deleted" };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unable to delete category";
+    return { error: message };
+  }
+}
+
 export async function createProductAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
   try {
     const { token } = requireAdmin();
@@ -89,6 +123,20 @@ export async function updateProductAction(formData: FormData): Promise<ActionRes
     return { success: "Product updated" };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unable to update product";
+    return { error: message };
+  }
+}
+
+export async function deleteProductAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
+  try {
+    const { token } = requireAdmin();
+    const id = Number(formData.get("id") ?? 0);
+    if (!id) return { error: "Missing product id" };
+    await catalogService(token).deleteProduct(id);
+    revalidatePath("/admin/products");
+    return { success: "Product deleted" };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unable to delete product";
     return { error: message };
   }
 }

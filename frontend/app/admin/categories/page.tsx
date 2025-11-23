@@ -1,4 +1,5 @@
 import CategoryForm from "@/components/admin/category-form";
+import CategoryRow from "@/components/admin/category-row";
 import { catalogService } from "@/services/catalog-service";
 import { getSessionUser } from "@/lib/session";
 
@@ -32,17 +33,7 @@ export default async function AdminCategoriesPage() {
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((cat) => (
-            <div
-              key={cat.id}
-              className="rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow"
-            >
-              <div className="flex items-center justify-between">
-                <h4 className="text-base font-semibold">{cat.name}</h4>
-                <span className="text-xs text-slate-500">#{cat.id}</span>
-              </div>
-              <p className="text-sm text-slate-600 line-clamp-2">{cat.description}</p>
-              <p className="mt-2 text-xs text-slate-500">{cat.is_active ? "Active" : "Inactive"}</p>
-            </div>
+            <CategoryRow key={cat.id} category={cat} />
           ))}
           {!categories.length && (
             <div className="col-span-full rounded-2xl border border-slate-200 bg-white p-4 text-center text-slate-600 shadow">

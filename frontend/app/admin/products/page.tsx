@@ -1,5 +1,5 @@
 import ProductForm from "@/components/admin/product-form";
-import ProductRow from "@/components/admin/product-row";
+import ProductEditCard from "@/components/admin/product-edit-card";
 import { catalogService } from "@/services/catalog-service";
 import { getSessionUser } from "@/lib/session";
 
@@ -35,12 +35,12 @@ export default async function AdminProductsPage() {
           <h3 className="text-lg font-semibold">Catalog</h3>
           <span className="text-sm text-slate-500">{products.length} total</span>
         </div>
-        <div className="space-y-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           {products.map((product) => (
-            <ProductRow key={product.id} product={product} />
+            <ProductEditCard key={product.id} product={product} categories={categories} />
           ))}
           {!products.length && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center text-slate-600 shadow">
+            <div className="col-span-full rounded-2xl border border-slate-200 bg-white p-4 text-center text-slate-600 shadow">
               No products yet.
             </div>
           )}

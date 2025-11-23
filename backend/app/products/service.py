@@ -94,3 +94,18 @@ class ProductService:
         await session.commit()
         await session.refresh(product)
         return product
+
+    async def delete_product(self, product_id: int, session: AsyncSession):
+        statement = Select(Product).where(Product.id == product_id)
+        result = await session.execute(statement)
+        product = result.scalar_one_or_none()
+
+        if not product:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Product with id {product_id} not found",
+            )
+
+        await session.delete(product)
+        await session.commit()
+        return {"message": "Product deleted successfully"}

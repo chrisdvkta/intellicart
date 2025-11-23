@@ -27,12 +27,24 @@ export class CatalogService {
     return this.client.post<Category>("/categories", input);
   }
 
+  async updateCategory(id: number, input: CategoryInput) {
+    return this.client.put<Category>(`/categories/${id}`, input);
+  }
+
+  async deleteCategory(id: number) {
+    return this.client.delete<{ message: string }>(`/categories/${id}`);
+  }
+
   async createProduct(input: ProductInput) {
     return this.client.post<Product>("/products", input);
   }
 
   async updateProduct(id: number, input: ProductInput) {
     return this.client.put<Product>(`/products/${id}`, input);
+  }
+
+  async deleteProduct(id: number) {
+    return this.client.delete<{ message: string }>(`/products/${id}`);
   }
 
   async getRecommendations(seedProductId: number, limit = 6) {

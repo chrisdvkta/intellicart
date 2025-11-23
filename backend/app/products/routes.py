@@ -1,10 +1,12 @@
 from typing import Annotated
-from fastapi import APIRouter, Body, Depends, status
+from fastapi import APIRouter, Body, Depends, HTTPException, status
 
 from app.models.product import ProductCreate
 from app.products.service import ProductService
 from app.db.main import sessionInstance
 from app.utils import get_current_token
+from app.auth.dependencies import get_current_user
+from app.models.user import User
 
 product_router = APIRouter()
 product_service = ProductService()
@@ -48,3 +50,14 @@ async def buy_product(
 ):
     print("user token : ", token)
     return await product_service.buy_product(product_id, session)
+
+
+@product_router.delete("/products/{product_id}")
+async def delete_product(
+    product_id: int,
+    session: sessionInstance,
+    user: User = Depends(get_current_user),
+):
+    if not getattr(user, "admin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return await product_service.delete_product(product_id, session)
